@@ -2,7 +2,7 @@
 /*
 Plugin Name: _International Shipping Disclaimer
 Description: International Shipping Disclaimer on checkout
-Version: 1.0
+Version: 1.1
 */
 
 
