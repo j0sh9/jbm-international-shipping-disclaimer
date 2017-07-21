@@ -29,6 +29,13 @@ function international_checkout_fields() {
         'required'   => true,
         ));
 
+    woocommerce_form_field( 'international_taxes', array(
+        'type'          => 'checkbox',
+        'class'         => array('intl_agree'),
+        'label'         => __('I acknowledge that I am responsible for all international taxes and duties incurred on these products.'),
+        'required'   => true,
+        ));
+
     echo '</div>';
 	
 	?>
@@ -52,9 +59,11 @@ add_action('woocommerce_checkout_process', 'international_checkout_field_process
 function international_checkout_field_process() {
 	if ( $_POST['shipping_country'] != 'US' ) {
 		if ( ! $_POST['international_loss'] )
-			wc_add_notice( __( 'Please agree to the International Shipping disclaimer.' ), 'error' );
+			wc_add_notice( __( 'Please agree to the Loss or Damage disclaimer.' ), 'error' );
 		if ( ! $_POST['international_release'] )
-			wc_add_notice( __( 'Please agree to the International Shipping disclaimer.' ), 'error' );
+			wc_add_notice( __( 'Please agree to the International Shipping Release.' ), 'error' );
+		if ( ! $_POST['international_taxes'] )
+			wc_add_notice( __( 'Please agree to the Taxes and Duties disclaimer.' ), 'error' );
 	}
 }
 add_action( 'woocommerce_checkout_update_order_meta', 'international_checkout_field_update_order_meta' );
@@ -65,6 +74,9 @@ function international_checkout_field_update_order_meta( $order_id ) {
     }
     if ( ! empty( $_POST['international_release'] ) ) {
         update_post_meta( $order_id, '_international_release', 'Agreed - '.current_time( 'mysql' ) );
+    }
+    if ( ! empty( $_POST['international_taxes'] ) ) {
+        update_post_meta( $order_id, '_international_taxes', 'Agreed - '.current_time( 'mysql' ) );
     }
 }
 ?>
